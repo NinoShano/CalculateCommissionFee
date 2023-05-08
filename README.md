@@ -30,15 +30,13 @@ Start the local development server
 
     php artisan serve
 
-You can now access the server at http://localhost:8000
-
-Install package for Excel
-
-    composer require maatwebsite/excel
-
 Requirements for excel package
     
     PHP: ^7.2\|^8.0
     Laravel: ^5.8
     PhpSpreadsheet: ^1.21
+
+## How to use
+
+You can now access the server at http://localhost:8000. On the default route upload excel file. With button submit action, which calculates commission fees. 
 
