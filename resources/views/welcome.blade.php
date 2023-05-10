@@ -825,11 +825,6 @@
             </form>
 
             <div class="myBack">
-                @if (cache()->has('fees'))
-                    @foreach(cache()->get('fees') as $fees)
-                        <p>{{ $fees === null ? '0' : $fees }}</p>
-                    @endforeach()
-                @endif
             </div>
         </div>
     </div>
