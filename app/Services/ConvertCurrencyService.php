@@ -12,6 +12,7 @@ class ConvertCurrencyService
         if (!$currencyRate['base'] === $currency) {
             return $amount;
         }
+
         return $amount / $currencyRate["rates"][$currency];
     }
 
@@ -21,6 +22,7 @@ class ConvertCurrencyService
         if (!$currencyRate['base'] === $currency) {
             return $feeAmount;
         }
+
         return $feeAmount * $currencyRate["rates"][$currency];
     }
 
@@ -28,6 +30,4 @@ class ConvertCurrencyService
     {
         return Http::get(env('API_URL'))->json();
     }
-
-
 }

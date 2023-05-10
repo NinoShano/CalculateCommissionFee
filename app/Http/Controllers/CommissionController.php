@@ -19,7 +19,7 @@ class CommissionController extends Controller
 
     public function importCommission(Request $request)
     {
-        Excel::import(new CommissionImport($this->service),$request->file('importFile'));
+        Excel::import(new CommissionImport($this->service), $request->file('importFile'));
 
         return redirect('/')->with('success', 'All good!');
     }

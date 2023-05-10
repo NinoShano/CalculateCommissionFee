@@ -48,11 +48,8 @@ class WithdrawCommissionFeeService
                     // increase transaction number
                     ++$transactions_count;
                     $transactions_amount += $user_transaction[4];
-
-
                 }
 //                if (array_intersect($user_transaction->toArray(), $transaction->toArray())){
-//                    dump("daemtxva");
 //                    break;
 //                }
             }
