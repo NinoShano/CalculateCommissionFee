@@ -14,11 +14,11 @@ class WithdrawCommissionFeeService
         $this->calculateService = $roundedUpFeeService;
     }
 
-    public function withdrawCommissionFee($users_transactions, $transaction)
+    public function withdrawCommissionFee($usersTransactions, $transaction)
     {
-        $transactions_count = 0;
-        $transactions_amount = 0;
-        $current_transaction_amount = 0;
+        $transactionsCount = 0;
+        $transactionsAmount = 0;
+        $currentTransactionAmount = 0;
 
         // check user type
         if ($transaction[2] === 'business') {
@@ -32,41 +32,41 @@ class WithdrawCommissionFeeService
         if ($transaction[2] === 'private') {
             // Defined range of current week for commission fee rule
             // Start : Monday
-            $start_date = new Carbon($transaction[0]);
-            $start_date = $start_date->startOfWeek();
+            $startDate = new Carbon($transaction[0]);
+            $startDate = $startDate->startOfWeek();
             // End : Saturday
-            $end_date = new Carbon($transaction[0]);
-            $end_date = $end_date->endOfWeek();
+            $endDate = new Carbon($transaction[0]);
+            $endDate = $endDate->endOfWeek();
 
             // Calculate user transactions history
-            foreach ($users_transactions as $key => $user_transaction) {
-                $current_transaction_date = new Carbon($user_transaction[0]);
+            foreach ($usersTransactions as $key => $userTransaction) {
+                $currentTransactionDate = new Carbon($userTransaction[0]);
 
                 // Check if transaction date is in current week range
-                if ($user_transaction[1] === $transaction[1] &&
-                    ($current_transaction_date->gte($start_date) && $current_transaction_date->lte($end_date))) {
+                if ($userTransaction[1] === $transaction[1] &&
+                    ($currentTransactionDate->gte($startDate) && $currentTransactionDate->lte($endDate))) {
                     // increase transaction number
-                    ++$transactions_count;
-                    $transactions_amount += $user_transaction[4];
+                    ++$transactionsCount;
+                    $transactionsAmount += $userTransaction[4];
                 }
-//                if (array_intersect($user_transaction->toArray(), $transaction->toArray())){
+//                if (array_intersect($userTransaction->toArray(), $transaction->toArray())){
 //                    break;
 //                }
             }
-            $historical_transactions_amount = $transactions_amount - $transaction[4];
+            $historicalTransactionsAmount = $transactionsAmount - $transaction[4];
 
-            if ($transactions_count > WithdrawFeeEnum::FREE_OF_CHARGE_OPERATION_QUANTITY ||
-                $historical_transactions_amount > WithdrawFeeEnum::FREE_OF_CHARGE_OPERATION_AMOUNT) {
+            if ($transactionsCount > WithdrawFeeEnum::FREE_OF_CHARGE_OPERATION_QUANTITY ||
+                $historicalTransactionsAmount > WithdrawFeeEnum::FREE_OF_CHARGE_OPERATION_AMOUNT) {
                 return $this->calculateService->calculateCommissionFee(
                     $transaction[4],
                     WithdrawFeeEnum::WITHDRAW_FEE_FOR_PRIVATE_CLIENT
                 );
             }
 
-            if ($transactions_amount > WithdrawFeeEnum::FREE_OF_CHARGE_OPERATION_AMOUNT) {
-                $current_transaction_amount = $transaction[4] - (WithdrawFeeEnum::FREE_OF_CHARGE_OPERATION_AMOUNT - $historical_transactions_amount);
+            if ($transactionsAmount > WithdrawFeeEnum::FREE_OF_CHARGE_OPERATION_AMOUNT) {
+                $currentTransactionAmount = $transaction[4] - (WithdrawFeeEnum::FREE_OF_CHARGE_OPERATION_AMOUNT - $historicalTransactionsAmount);
                 return $this->calculateService->calculateCommissionFee(
-                    $current_transaction_amount,
+                    $currentTransactionAmount,
                     WithdrawFeeEnum::WITHDRAW_FEE_FOR_PRIVATE_CLIENT
                 );
             }

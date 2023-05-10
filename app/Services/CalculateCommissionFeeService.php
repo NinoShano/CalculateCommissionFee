@@ -30,26 +30,26 @@ class CalculateCommissionFeeService
      */
     public function commissionFee($rows): array
     {
-        $commission_fee_array = [];
-        $commission_fee = 0;
+        $commissionFeeArray = [];
+        $commissionFee = 0;
 
         foreach ($rows as $row) {
             $row[0] = $this->dateService->toDateTime($row[0]);
-            $commission_fee = $this->convertCurrencyService->convertToEUR($row[5], $row[4]);
+            $commissionFee = $this->convertCurrencyService->convertToEUR($row[5], $row[4]);
 
             if ($row[3] === OperationTypeEnum::DEPOSIT->value) {
-                $commission_fee = $this->calculateService->calculateCommissionFee(
-                    $commission_fee,
+                $commissionFee = $this->calculateService->calculateCommissionFee(
+                    $commissionFee,
                     DepositFeeEnum::DEPOSIT_FEE
                 );
             } elseif ($row[3] === OperationTypeEnum::WITHDRAW->value) {
-                $commission_fee = $this->withdrawService->withdrawCommissionFee($rows, $row);
+                $commissionFee = $this->withdrawService->withdrawCommissionFee($rows, $row);
             }
-            $commission_fee_array[] = $this->calculateService->roundUpCommissionFee(
-                $this->convertCurrencyService->convertFromEUR($row[5], $commission_fee)
+            $commissionFeeArray[] = $this->calculateService->roundUpCommissionFee(
+                $this->convertCurrencyService->convertFromEUR($row[5], $commissionFee)
             );
         }
 
-        return $commission_fee_array;
+        return $commissionFeeArray;
     }
 }

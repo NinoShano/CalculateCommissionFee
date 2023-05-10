@@ -12,7 +12,7 @@ class DateConverterService
      */
     public function toDateTime($row): string
     {
-        $operationDate = Date::excelToDateTimeObject($row);
+        $operationDate = Date::excelToDateTimeObject((int)$row);
         $operationDate = new Carbon($operationDate);
 
         return Carbon::parse($operationDate)->format('Y-m-d');
