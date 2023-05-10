@@ -17,7 +17,7 @@ class CalculateService
      */
     public function roundUpCommissionFee($number): float
     {
-        return number_format(ceil($number * 100) / 100, 2, ".", "");
+        return number_format($number, 2, ".", "");
     }
 
 

@@ -4,25 +4,21 @@ namespace App\Services;
 
 use App\Enums\DepositFeeEnum;
 use App\Enums\OperationTypeEnum;
-use Illuminate\Support\Facades\Http;
 
 class CalculateCommissionFeeService
 {
     protected $dateService;
     protected $calculateService;
     protected $withdrawService;
-    protected $convertCurrencyService;
 
     public function __construct(
         DateConverterService $dateConverterService,
         CalculateService $calculateFeeService,
-        WithdrawCommissionFeeService $withdrawCommissionFeeService,
-        ConvertCurrencyService $convertCurrencyService
+        WithdrawCommissionFeeService $withdrawCommissionFeeService
     ) {
         $this->dateService = $dateConverterService;
         $this->calculateService = $calculateFeeService;
         $this->withdrawService = $withdrawCommissionFeeService;
-        $this->convertCurrencyService = $convertCurrencyService;
     }
 
     /*
@@ -35,7 +31,6 @@ class CalculateCommissionFeeService
 
         foreach ($rows as $row) {
             $row[0] = $this->dateService->toDateTime($row[0]);
-            $commissionFee = $this->convertCurrencyService->convertToEUR($row[5], $row[4]);
 
             if ($row[3] === OperationTypeEnum::DEPOSIT->value) {
                 $commissionFee = $this->calculateService->calculateCommissionFee(
@@ -45,9 +40,7 @@ class CalculateCommissionFeeService
             } elseif ($row[3] === OperationTypeEnum::WITHDRAW->value) {
                 $commissionFee = $this->withdrawService->withdrawCommissionFee($rows, $row);
             }
-            $commissionFeeArray[] = $this->calculateService->roundUpCommissionFee(
-                $this->convertCurrencyService->convertFromEUR($row[5], $commissionFee)
-            );
+            $commissionFeeArray[] = $this->calculateService->roundUpCommissionFee($commissionFee);
         }
 
         return $commissionFeeArray;
