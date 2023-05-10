@@ -57,6 +57,7 @@ class WithdrawCommissionFeeService
 //                }
             }
             $historical_transactions_amount = $transactions_amount - $transaction[4];
+
             if ($transactions_count > WithdrawFeeEnum::FREE_OF_CHARGE_OPERATION_QUANTITY ||
                 $historical_transactions_amount > WithdrawFeeEnum::FREE_OF_CHARGE_OPERATION_AMOUNT) {
                 return $this->calculateService->calculateCommissionFee(
@@ -64,6 +65,7 @@ class WithdrawCommissionFeeService
                     WithdrawFeeEnum::WITHDRAW_FEE_FOR_PRIVATE_CLIENT
                 );
             }
+
             if ($transactions_amount > WithdrawFeeEnum::FREE_OF_CHARGE_OPERATION_AMOUNT) {
                 $current_transaction_amount = $transaction[4] - (WithdrawFeeEnum::FREE_OF_CHARGE_OPERATION_AMOUNT - $historical_transactions_amount);
                 return $this->calculateService->calculateCommissionFee(
