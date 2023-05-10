@@ -26,10 +26,10 @@
             color: white;
         }
 
-        .myBack{
+        .myBack {
             background-color: white;
             margin-top: 10px;
-            padding:20px;
+            padding: 20px;
             border-radius: 5px;
         }
 
@@ -824,8 +824,13 @@
                 <button type="submit" class="btn myButton mt-5">Submit</button>
             </form>
 
-            <div class="myBack">
-            </div>
+            @if(isset($commissionFees))
+                <div class="myBack">
+                    @foreach($commissionFees as $fees)
+                        <p>{{$fees}}</p>
+                    @endforeach
+                </div>
+            @endif
         </div>
     </div>
 </div>

@@ -85,5 +85,4 @@ class CommissionFeeTest extends TestCase
 
         $this->assertEquals(0.3, $result);
     }
-
 }

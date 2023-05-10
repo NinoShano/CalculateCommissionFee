@@ -10,6 +10,7 @@ use Maatwebsite\Excel\Concerns\WithChunkReading;
 class CommissionImport implements ToCollection, WithChunkReading
 {
     protected $service;
+    private $data = [];
 
     public function __construct(CalculateCommissionFeeService $calculateCommissionFeeService)
     {
@@ -21,7 +22,13 @@ class CommissionImport implements ToCollection, WithChunkReading
      */
     public function collection(Collection $rows)
     {
-        return $this->service->commissionFee($rows);
+        $this->data = $this->service->commissionFee($rows);
+    }
+
+    // Return the $data array
+    public function getData(): array
+    {
+        return $this->data;
     }
 
     public function chunkSize(): int
